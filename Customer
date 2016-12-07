@@ -1,0 +1,21 @@
+
+public class Customer extends Person {
+	private String mail;
+	private String tel;
+	private int ID;
+
+	public Customer(String name, String lastName, String mail, String tel, int ID) {
+		this.fname = name;
+		this.lname = lastName;
+		this.mail = mail;
+		this.tel = tel;
+		this.ID = ID;
+	}
+
+	public String toString() {
+
+		String result = this.fname + " " + this.lname + " " + this.mail + " " + this.tel + " "
+				+ Integer.toString(this.ID);
+		return result;
+	}
+}
