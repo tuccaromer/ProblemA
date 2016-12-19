@@ -1,0 +1,499 @@
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Random;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.text.InternationalFormatter;
+
+public class interFace extends JPanel implements MouseListener, ActionListener {
+
+	private JTextField txtFname, txtLname, txtMail, txtTel, date, textInfo;
+	private JTabbedPane myTabs;
+	private JButton rgs, btn2, search, reservation;
+	private JLabel Fname, Lname, mail, tel, info, info2, dateL, info3, tID, tcompany, thour, tfreeseats,seat,cost;
+	private Customer C;
+	static int counterID = 150; // I have used this to generate a ID per Bus.
+	static String[][] rows = new String[15][5];
+	static int row2;
+	static BUS[] buss = new BUS[15];
+	static JTable table;
+	static String[] coloum = { "Bus_ID", "Bus_Firm", "Bus_Time", "Free Seat","Cost" };
+	DefaultListModel model2;
+	JList list;
+	Random rna ,rna2;
+	Customer customer;
+	int nOffree ;
+	String selectedList;
+
+	private JPanel tabOne, tabTwo, TabThree, TabFour;
+
+	DefaultTableModel model;
+
+	public interFace() {
+
+		myTabs = new JTabbedPane();
+
+		tabOne = new JPanel();
+		tabOne.setLayout(null);
+		// tabOne.setBackground(new Color(50, 100, 200));
+
+		rgs = new JButton("Register");
+		rgs.setSize(200, 50);
+		rgs.setLocation(300, 270);
+		rgs.addActionListener(this);
+		tabOne.add(rgs);
+
+		txtFname = new JTextField();
+		txtFname.setSize(200, 40);
+		txtFname.setLocation(300, 70);
+		tabOne.add(txtFname);
+
+		Fname = new JLabel("First Name ");
+		Fname.setSize(200, 40);
+		Fname.setLocation(120, 70);
+
+		tabOne.add(Fname);
+		Fname.setFont(new Font("information", Font.ITALIC, 30));
+
+		txtLname = new JTextField();
+		txtLname.setSize(200, 40);
+		txtLname.setLocation(300, 120);
+		tabOne.add(txtLname);
+
+		Lname = new JLabel("Last Name ");
+		Lname.setSize(200, 40);
+		Lname.setLocation(120, 120);
+		tabOne.add(Lname);
+		Lname.setFont(new Font("information", Font.ITALIC, 30));
+
+		txtMail = new JTextField();
+		txtMail.setSize(200, 40);
+		txtMail.setLocation(300, 170);
+		tabOne.add(txtMail);
+		mail = new JLabel("Mail ");
+		mail.setSize(80, 40);
+		mail.setLocation(120, 170);
+		mail.setFont(new Font("information", Font.ITALIC, 30));
+		tabOne.add(mail);
+		txtTel = new JTextField();
+		txtTel.setSize(200, 40);
+		txtTel.setLocation(300, 220);
+		tabOne.add(txtTel);
+
+		tel = new JLabel("Tel ");
+		tel.setSize(80, 40);
+		tel.setLocation(120, 220);
+		tel.setFont(new Font("information", Font.ITALIC, 30));
+		tabOne.add(tel);
+
+		info2 = new JLabel(" ");
+		info2.setSize(800, 100);
+		info2.setLocation(120, 400);
+		info2.setFont(new Font("information", Font.BOLD, 15));
+		tabOne.add(info2);
+
+		myTabs.add("Sign in-up", tabOne);
+		////////////////////////////////
+
+		tabTwo = new JPanel();
+		tabTwo.setLayout(null);
+		// tabTwo.setBackground(new Color(200, 100, 50));
+
+		myTabs.add("Reservation", tabTwo);
+
+		date = new JTextField();
+		date.setSize(200, 40);
+		date.setLocation(200, 20);
+		tabTwo.add(date);
+
+		search = new JButton("Search");
+		search.setSize(200, 40);
+		search.setLocation(400, 20);
+		search.addActionListener(this);
+		search.setEnabled(false);
+		tabTwo.add(search);
+
+		dateL = new JLabel("Date :");
+		dateL.setSize(200, 40);
+		dateL.setLocation(100, 20);
+		dateL.setFont(new Font("information", Font.BOLD, 30));
+
+		info3 = new JLabel(" ");
+		info3.setSize(500, 50);
+		info3.setLocation(200, 50);
+		info3.setFont(new Font("information", Font.BOLD, 15));
+
+		tID = new JLabel("BUS ID");
+		tID.setSize(500, 220);
+		tID.setLocation(20, 160);
+		tID.setFont(new Font("information", Font.BOLD, 15));
+		tabTwo.add(tID);
+
+		tcompany = new JLabel("BUS COMPANY");
+		tcompany.setSize(500, 50);
+		tcompany.setLocation(150, 245);
+		tcompany.setFont(new Font("information", Font.BOLD, 15));
+		tabTwo.add(tcompany);
+
+		thour = new JLabel("BUS HOUR");
+		thour.setSize(500, 50);
+		thour.setLocation(300, 245);
+		thour.setFont(new Font("information", Font.BOLD, 15));
+		tabTwo.add(thour);
+		
+		cost = new JLabel("COST");
+		cost.setSize(500, 50);
+		cost.setLocation(580, 245);
+		cost.setFont(new Font("information", Font.BOLD, 15));
+		tabTwo.add(cost);
+
+		tfreeseats = new JLabel("FREE SEATS");
+		tfreeseats.setSize(500, 50);
+		tfreeseats.setLocation(430, 245);
+		tfreeseats.setFont(new Font("information", Font.BOLD, 15));
+		tabTwo.add(tfreeseats);
+
+		textInfo = new JTextField();
+		textInfo.setFont(new Font("information", Font.BOLD, 15));
+		textInfo.setSize(690, 50);
+		textInfo.setLocation(0, 100);
+		textInfo.setEnabled(false);
+		tabTwo.add(textInfo);
+
+		reservation = new JButton("Make Resarvation");
+		reservation.setSize(200, 50);
+		reservation.setLocation(200, 170);
+		reservation.addActionListener(this);
+		tabTwo.add(reservation);
+
+		tabTwo.add(info3);
+		tabTwo.add(dateL);
+		
+		seat = new JLabel("Choose a seat number");
+		seat.setSize(500, 50);
+		seat.setLocation(450,160 );
+		seat.setFont(new Font("information", Font.BOLD, 17));
+		tabTwo.add(seat);
+		
+		
+
+		model = new DefaultTableModel(30, 5);
+		JComboBox c =new JComboBox();
+		c.setLocation(450, 200);
+		c.setSize(130, 20);
+		
+		c.addActionListener(new java.awt.event.ActionListener(){
+			
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				int index = c.getSelectedIndex();
+				//System.out.println(index);
+				Object a = c.getItemAt(index);
+				selectedList=a.toString();
+			}
+			
+			
+		});
+		tabTwo.add(c);
+
+		table = new JTable(model);
+		table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+		table.setSize(680, 250);
+		table.setLocation(5, 280);
+
+		; // JButton button = new JButton("delete");
+			// button.setSize(100, 30); //add(button); add(table);
+
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = table.rowAtPoint(evt.getPoint());
+				int col = table.columnAtPoint(evt.getPoint());
+				Object a = model.getValueAt(row, col);
+				System.out.println("row : " + row + " coloum : " + col);
+				String getInfo = "";
+				for (int i = 0; i < 3; i++) {
+					// System.out.println(rows[row][i]);
+					getInfo = getInfo + (rows[row][i]) + " ; ";
+
+				}
+				
+				getInfo=getInfo+selectedList;
+				textInfo.setText(getInfo);
+				nOffree=Integer.parseInt((rows[row][3]));
+				System.out.println("bofff"+nOffree);
+				for (int i = 0; i < nOffree; i++) {
+					rna= new Random();
+					int answer = rna.nextInt(42 - 1) + 1;
+					c.addItem(answer);
+				}
+				
+				//
+				// model.removeRow(table.getSelectedRow()); //
+				// System.out.println(a);
+
+			}
+
+		});
+		
+		//TabThree = new JPanel("Ticket");
+		//TabThree.setLayout(null);
+
+		KeyListener keyListener = new KeyListener() {
+			public void keyPressed(KeyEvent keyEvent) {
+				// date.enable(true);
+			}
+
+			public void keyReleased(KeyEvent keyEvent) {
+				// printIt("Released", keyEvent);
+
+				String current = date.getText();
+				if (current.length() == 2) {
+
+					current = current + "-";
+					date.setText(current);
+					current = date.getText();
+				} else if (current.length() == 5) {
+					current = current + "-";
+					date.setText(current);
+					current = date.getText();
+
+				} else if (current.length() == 10) {
+					// current = current + "-";
+					String a = current;
+					int minus1 = a.charAt(2);
+					int minus2 = a.charAt(5);
+
+					for (int i = 0; i < a.length(); i++) {
+						boolean checking = false;
+						if (i != 2 && i != 5) {
+
+							int check = (int) a.charAt(i);
+							for (int j = 48; j < 58; j++) { // I have use here
+															// // ASCII CODES.
+								if (check == j) {
+									checking = true;
+								}
+							}
+							if (checking == false) {
+
+								info3.setText("Please give integer values, Otherwise you can not search");
+								date.setText("");
+
+							}
+						}
+					}
+					String day = Character.toString(date.getText().charAt(0))
+							+ Character.toString(date.getText().charAt(1));
+					String mounth = Character.toString(date.getText().charAt(3))
+							+ Character.toString(date.getText().charAt(4));
+					String year = Character.toString(date.getText().charAt(6))
+							+ Character.toString(date.getText().charAt(7))
+							+ Character.toString(date.getText().charAt(8))
+							+ Character.toString(date.getText().charAt(9));
+					int dayOfdate = Integer.parseInt(day);
+					int yearOfdate = Integer.parseInt(year);
+					int MounthOfdate = Integer.parseInt(mounth);
+
+					if ((dayOfdate < 1 || dayOfdate > 31) || (MounthOfdate < 1 || MounthOfdate > 12)
+							|| (yearOfdate < 2016 || yearOfdate > 2016)) {
+						info3.setText("Please give available value for Day Mounth and Year . ");
+
+					} else if (date.getText().length() == 10) {
+						search.setEnabled(true);
+						System.out.println(day);
+						info3.setText("");
+					}
+				}
+			}
+
+			public void keyTyped(KeyEvent keyEvent) {
+				// printIt("Typed", keyEvent);
+			}
+
+			private void printIt(String title, KeyEvent keyEvent) {
+				int keyCode = keyEvent.getKeyCode();
+				String keyText = KeyEvent.getKeyText(keyCode);
+				// System.out.println(title + " : " + keyText + " / " +
+				// keyEvent.getKeyChar());
+			}
+		};
+		date.addKeyListener(keyListener);
+
+		tabTwo.add(table);
+		add(myTabs);
+
+		setLayout(new GridLayout(1, 1));
+
+		/////////////////////////////////////////////////////////
+
+	}
+
+	public static void fillAllBusses() {
+		String[] firms = new String[5];
+		firms[0] = "KamilKoç";
+		firms[1] = "Metro";
+		firms[2] = "Nilifer";
+		firms[3] = "Uludağ";
+		firms[4] = "Ulusoy";
+
+		String[] time = new String[12]; // I have created array for generating
+										// time by using index of time []
+
+		time[0] = "10:00";
+		time[1] = "11:00";
+		time[2] = "12:00";
+
+		time[3] = "13:00";
+		time[4] = "14:00";
+		time[5] = "15:00";
+		time[6] = "16:00";
+		time[7] = "17:00";
+		time[8] = "18:00";
+
+		time[9] = "19:00";
+		time[10] = "20:00";
+		time[11] = "21:00";
+		Random rn = new Random();
+
+		int answer = rn.nextInt(15 - 3) + 3; // I have created BUSSES number of
+												// between 3 and 15;
+		Random rna2= new Random();
+		for (int i = 0; i < answer; i++) {
+			int take = rn.nextInt(4 - 0) + 0;
+			int takeTime = rn.nextInt(11 - 0) + 0;
+			buss[i] = new BUS(counterID++, firms[take], time[takeTime]);
+			buss[i].seatle();
+			System.out.println(buss[i].getFreeSeat());
+			// System.out.println(buss[i].ID + buss[i].firm + buss[i].time);
+
+			rows[i][0] = Integer.toString(buss[i].ID);
+			rows[i][1] = buss[i].firm;
+			rows[i][2] = buss[i].time;
+			rows[i][3] = Integer.toString(buss[i].getFreeSeat());
+		
+			int answer2 = rna2.nextInt(100 - 70) + 70;
+			String row14 = 
+			rows[i][4]= Integer.toString(answer2);
+		}
+		table.setModel(new DefaultTableModel(rows, coloum));
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(rgs)) {
+
+			if (txtFname.getText().equals("") || txtLname.equals("") || txtMail.equals("") || txtTel.equals("")) {
+				JOptionPane.showMessageDialog(null,
+						"Please give all information \n If you don't give all information , You can not register to make reservation.",
+						"Inane warning", JOptionPane.WARNING_MESSAGE);
+			} else {
+
+				C = new Customer(txtFname.getText(), txtLname.getText(), txtMail.getText(), txtTel.getText(),
+						counterID++);
+				info2.setText(C.toString() + "\n has been recorded.");
+			}
+		} else if (e.getSource().equals(search)) {
+
+			fillAllBusses();
+			search.setEnabled(false);
+		} else if (e.getSource().equals(date)) {
+			date.setEnabled(true);
+
+		}
+	}
+
+	public static void part1() {
+
+		JTextField username = new JTextField();
+		JTextField password = new JPasswordField();
+		Object[] message = { "Username:", username, "Password:", password };
+		int counter = 0;
+		while (counter < 3) {
+			int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+			if (option == JOptionPane.OK_OPTION) {
+				if (username.getText().equals("�MER") && password.getText().equals("8855")) {
+					System.out.println("Welcome");
+					break;
+				} else {
+					System.out.println("login failed , Try again ! ");
+					username.setText(" ");
+					password.setText(" ");
+				}
+			} else {
+				System.out.println("Login canceled");
+			}
+			counter++;
+		}
+
+		System.out.println("Login canceled");
+	}
+
+	public static void main(String[] args) {
+
+		JFrame window = new JFrame("Making Reservation");
+
+		interFace newOne = new interFace();
+
+		window.add(newOne);
+		// Random ran = new Random();
+		window.setSize(700, 600);
+		window.setVisible(true);
+		window.setResizable(false);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+
+	}
+
+}
